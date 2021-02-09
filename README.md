@@ -39,3 +39,7 @@ Update: Fixed Tasks list,changed things for leave requests, changed things for m
 
 ### 06/02/2021
 Update : V1.0 apk finished. Starting documentation and work on implementing BLoC architecture
+
+### 09/02/2021
+Update : V1.0 apk modified for non availability of biometrics, changed attendance logging method
+Pushed to all staff.

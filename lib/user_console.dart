@@ -80,6 +80,15 @@ class _UserConsoleState extends State<UserConsole> {
       home: Scaffold(
         appBar: AppBar(
           title: Text(path[_currentIndex].toString()),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.info),
+              tooltip: 'Show info',
+              onPressed: () {
+                _settingModalBottomSheet(context);
+              },
+            ),
+          ],
           backgroundColor: Colors.lightBlueAccent,
           elevation: 0.0,
         ),
@@ -92,4 +101,24 @@ class _UserConsoleState extends State<UserConsole> {
       navigatorKey: navigatorKey,
     );
   }
+}
+
+void _settingModalBottomSheet(context) {
+  showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return Container(
+          child: new Wrap(
+            children: <Widget>[
+              new ListTile(
+                title: new Text(
+                    'Attendii - Indigenious Attendance App of Acculi Labs Pvt. Ltd.'),
+                subtitle: new Text(
+                    'Tailormade for multi-location, flexible working hours, hybrid device usage:- work from home, field operation setup'),
+                isThreeLine: true,
+              ),
+            ],
+          ),
+        );
+      });
 }

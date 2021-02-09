@@ -2,7 +2,6 @@ import 'package:acculi_attendance_app/the_user.dart' as global;
 import 'package:acculi_attendance_app/user_console.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:location/location.dart';
 
 final db = FirebaseFirestore.instance;
@@ -14,6 +13,7 @@ class CurrentTask extends StatefulWidget {
 
 Location location = new Location();
 
+/*
 Future<void> setAttendance() async {
   DateTime now = DateTime.now();
 
@@ -74,7 +74,22 @@ Future<void> setAttendance() async {
           .catchError((error) => print("Error"));
     }
   }
+  if (query.size == 0) {
+    print('First attendance for the user has been logged');
+    return db
+        .collection("position")
+        .add({
+          'Email': global.globalSessionData.email,
+          'Name': global.globalSessionData.name,
+          'Location': GeoPoint(pos.latitude, pos.longitude),
+          'Address': mid,
+          'Time': now,
+        })
+        .then((value) => print("NoError in adding attendance"))
+        .catchError((error) => print("Error"));
+  }
 }
+*/
 
 class _CurrentTaskState extends State<CurrentTask> {
   Future<bool> _onBackPressed() {
@@ -187,7 +202,6 @@ class _CurrentTaskState extends State<CurrentTask> {
                       child: TextButton(
                         child: Text('View Location'),
                         onPressed: () async {
-                          await setAttendance();
                           var did;
                           did = global.globalSessionData.docid;
                           var myid = global.globalSessionData.myId;

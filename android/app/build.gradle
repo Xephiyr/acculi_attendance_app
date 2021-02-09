@@ -69,7 +69,6 @@ android {
             //signingConfig signingConfigs.debug
             signingConfig signingConfigs.release
             multiDexEnabled true
-            minifyEnabled false
         }
         debug {
             signingConfig signingConfigs.debug
