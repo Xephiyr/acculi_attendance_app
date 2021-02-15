@@ -1,7 +1,6 @@
 import 'package:acculi_attendance_app/data_models.dart';
 import 'package:acculi_attendance_app/the_user.dart' as global;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animations/loading_animations.dart';
@@ -9,15 +8,14 @@ import 'package:loading_animations/loading_animations.dart';
 var database = FirebaseFirestore.instance;
 List<int> days = List();
 List<Position> datas = List();
-final FirebaseAuth auth = FirebaseAuth.instance;
-final User user = auth.currentUser;
+
 String m, n;
-GeoPoint l;
+String l;
 Timestamp ts;
 bool ot;
 var t, check;
 var i;
-List<Position> attend = List();
+/*List<Position> attend = List();
 
 Future<List<Position>> takeData() async {
   i = 0;
@@ -56,7 +54,7 @@ Future<List<Position>> takeData() async {
   await new Future.delayed(new Duration(seconds: 5));
   print("total data rec:$i");
   return attend;
-}
+}*/
 
 class AttendanceTab extends StatefulWidget {
   @override
@@ -73,7 +71,7 @@ class _AttendanceTabState extends State<AttendanceTab>
   bool get wantKeepAlive => true;
   var data;
 
-  @override
+  /* @override
   void initState() {
     setState(() {
       data = takeData();
@@ -148,11 +146,14 @@ class _AttendanceTabState extends State<AttendanceTab>
             ],
           );
         });
-  }
+  }*/
 
-  /*void initState() {
+  void initState() {
     setState(() {
-      att = database.collection('position').where('Email', isEqualTo: user.email).orderBy('Time');
+      att = database
+          .collection('position')
+          .where('Email', isEqualTo: global.globalSessionData.email)
+          .orderBy('Time');
       days.clear();
       days.add(0);
     });
@@ -203,50 +204,42 @@ class _AttendanceTabState extends State<AttendanceTab>
           return new ListView(
             children: snapshot.data.docs.map((DocumentSnapshot doc) {
               m = doc.data()['Email'];
-              l = doc.data()['Location'];
+              String l = doc.data()['Address'];
               n = doc.data()['Name'];
               ts = doc.data()['Time'];
-              ot = doc.data()['onTime'];
-              print(m.toString() + " " + l.toString() + " " + ts.toString());
+              var time = ts.toDate();
+              var address = l;
+              String mid;
+
+              var len = address.length;
+              mid = address.substring(0, len - 7);
+              print(m.toString() + " " + l + " " + ts.toString());
               t = ts.toDate();
-              Position dummy = Position(m, l, n, t, ot);
-              check = dummy.time.day;
-              if (days.contains(check)) {
-                print("data already exists");
-              } else {
-                days.add(check);
-                datas.add(dummy);
-                return new Card(
-                  child: new ListTile(
-                    enabled: false,
-                    title: Text("Date   " +
-                        dummy.time.day.toString() +
-                        "." +
-                        dummy.time.month.toString() +
-                        "." +
-                        dummy.time.year.toString() +
-                        "   Time    " +
-                        dummy.time.hour.toString() +
-                        ":" +
-                        dummy.time.minute.toString() +
-                        ":" +
-                        dummy.time.second.toString()),
-                    subtitle: Text("Day:" +
-                        DateFormat('EEEEE', 'en_US').format(dummy.time) +
-                        "\n at Latitude :" +
-                        dummy.location.latitude.toString() +
-                        " at Longitude:" +
-                        dummy.location.longitude.toString()),
-                    isThreeLine: true,
-                    onTap: () {
-                      print('Enter into map here');
-                    },
-                  ),
-                );
-              }
+
+              return new Card(
+                child: new ListTile(
+                  title: Text("Date   " +
+                      time.day.toString() +
+                      "." +
+                      time.month.toString() +
+                      "." +
+                      time.year.toString() +
+                      "   Time    " +
+                      time.hour.toString() +
+                      ":" +
+                      time.minute.toString() +
+                      ":" +
+                      time.second.toString()),
+                  subtitle: Text("Day:" +
+                      DateFormat('EEEEE', 'en_US').format(time) +
+                      "\nAddress:" +
+                      address),
+                  isThreeLine: true,
+                ),
+              );
             }).toList(),
           );
       },
     );
-  }*/
+  }
 }

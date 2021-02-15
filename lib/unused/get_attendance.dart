@@ -50,13 +50,12 @@ Future<List<Position>> takeData() async {
       .then((QuerySnapshot snapshot) => {
             snapshot.docs.forEach((f) {
               print(f.data());
-              var m, l, n, t, ot;
+              var m, l, n, t;
               var check;
               m = f.data()['Email'];
               l = f.data()['Location'];
               n = f.data()['Name'];
               ts = f.data()['Time'];
-              ot = f.data()['onTime'];
               print(m.toString() + " " + l.toString() + " " + ts.toString());
               t = ts.toDate();
               Position dummy = Position(m, l, n, t);

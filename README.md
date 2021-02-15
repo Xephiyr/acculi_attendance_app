@@ -43,3 +43,7 @@ Update : V1.0 apk finished. Starting documentation and work on implementing BLoC
 ### 09/02/2021
 Update : V1.0 apk modified for non availability of biometrics, changed attendance logging method
 Pushed to all staff.
+
+### 15/02/2021
+Update : FIXED screen not sizing to some phones and hiding buttons, Back button no longer exits 
+automatically.
