@@ -115,8 +115,7 @@ class _UserConsoleState extends State<UserConsole> {
                 icon: const Icon(Icons.logout),
                 tooltip: 'Logout',
                 onPressed: () async {
-                  await signOutOf();
-                  exit(0);
+                  await _onBackPressed();
                 },
               ),
             ],
@@ -133,24 +132,4 @@ class _UserConsoleState extends State<UserConsole> {
       navigatorKey: navigatorKey,
     );
   }
-}
-
-void _settingModalBottomSheet(context) {
-  showModalBottomSheet(
-      context: context,
-      builder: (BuildContext bc) {
-        return Container(
-          child: new Wrap(
-            children: <Widget>[
-              new ListTile(
-                title: new Text(
-                    'Attendii - Indigenious Attendance App of Acculi Labs Pvt. Ltd.'),
-                subtitle: new Text(
-                    'Tailormade for multi-location, flexible working hours, hybrid device usage:- work from home, field operation setup'),
-                isThreeLine: true,
-              ),
-            ],
-          ),
-        );
-      });
 }

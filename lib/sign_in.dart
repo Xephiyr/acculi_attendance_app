@@ -1,8 +1,8 @@
+import 'package:acculi_attendance_app/the_user.dart' as global;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:acculi_attendance_app/the_user.dart' as global;
 import 'package:shared_preferences/shared_preferences.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -13,6 +13,7 @@ bool done;
 String name;
 String email;
 String imageUrl;
+
 //String _verificationId;
 
 /*Future<String> signInEmail(String semail, String spassword) async {
@@ -86,7 +87,43 @@ Future<void> signOutEmail() async {
 Future<String> signInWithGoogle() async {
   await Firebase.initializeApp();
   global.clearSessionData();
-
+  DateTime now = DateTime.now();
+  var day = now.day;
+  var month = now.month;
+  var db = FirebaseFirestore.instance;
+  final QuerySnapshot querys = await db
+      .collection('position')
+      .where('Email', isEqualTo: global.globalSessionData.email)
+      .orderBy(
+        'Time',
+        descending: false,
+      )
+      .limitToLast(1)
+      .get();
+  if (querys.size != 0) {
+    var snapshot = querys.docs[0];
+    DateTime uTime = snapshot.data()['Time'].toDate();
+    print(uTime.toString());
+    var uDay = uTime.day;
+    var uMonth = uTime.month;
+    bool checking;
+    if (day == uDay) {
+      if (month == uMonth) {
+        checking = false;
+      }
+      if (month != uMonth) {
+        checking = true;
+      }
+    } else if (day != uDay) {
+      checking = true;
+    }
+    if (checking == true) {
+      global.globalSessionData.logged = false;
+    }
+    if (checking != true) {
+      global.globalSessionData.logged = true;
+    }
+  }
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
   final GoogleSignInAuthentication googleSignInAuthentication =
       await googleSignInAccount.authentication;
@@ -96,7 +133,8 @@ Future<String> signInWithGoogle() async {
     idToken: googleSignInAuthentication.idToken,
   );
 
-  final UserCredential authResult = await _auth.signInWithCredential(credential);
+  final UserCredential authResult =
+      await _auth.signInWithCredential(credential);
   final User user = authResult.user;
 
   if (user != null) {
@@ -139,7 +177,10 @@ Future<String> signInWithGoogle() async {
         var snapshot = querys.docs[0];
         global.globalSessionData.nfcID = snapshot.data()['NfcID'];
         global.globalSessionData.phoneNo = snapshot.data()['phone'];
-        database.collection('emp').doc(snapshot.id).update({'Email': email}).then((value) {
+        database
+            .collection('emp')
+            .doc(snapshot.id)
+            .update({'Email': email}).then((value) {
           print('User Updated');
 
           msg = '$user';

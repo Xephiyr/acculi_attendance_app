@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:location/location.dart';
 
-bool logged = false;
+bool logged = global.globalSessionData.logged;
 
 /*
 * import 'package:acculi_attendance_app/nfc_auth.dart';
@@ -24,15 +24,15 @@ class _UserPageState extends State<UserPage> {
     // set up the button
     return showDialog(
         context: context,
-        builder: (BuildContext context) {
+        builder: (BuildContext contexting) {
           return AlertDialog(
             title: Text('Attendance'),
-            content: Text('Your Attendance has already been logged'),
+            content: Text('Your Attendance has been logged'),
             actions: <Widget>[
               FlatButton(
                 child: Text('ok'),
                 onPressed: () {
-                  Navigator.of(context).pop(false);
+                  Navigator.of(contexting).pop(false);
                 },
               ),
             ],

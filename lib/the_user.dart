@@ -4,7 +4,7 @@ class SessionData {
   String email;
   String name;
   String nfcID;
-  bool logged = false;
+  bool logged;
   String myId;
   GeoPoint taskPosition;
   String docid;
